@@ -1529,12 +1529,12 @@
             <!-- TRADE 1 -->
             <div style="display:grid; grid-template-columns:80px 250px 240px 255px 250px 245px 100px; padding:22px 0; border-bottom:1px solid rgba(255,255,255,0.06); align-items:center;">
                 <span style="color:rgba(255,255,255,0.5); font-family:Arial; font-size:13px;"># 01</span>
-                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
-                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
-                <span><span style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:4px 16px; border-radius:20px; color:#fff; font-size:11px;">*</span></span>
-                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
-                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
-                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">01 Jun 2026</span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">EURUSD</span>
+                <span><span style="background:rgba(44,90,255,0.16); border:1px solid rgba(44,90,255,0.45); padding:4px 16px; border-radius:20px; color:#fff; font-size:11px;">SELL</span></span>
+                <span style="color:#2c5aff; font-family:Arial; font-size:13px; font-weight:600;">TP +5R</span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">1</span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">1:5</span>
             </div>
         </div>
     </div>
@@ -1555,14 +1555,14 @@
                 <div class="monthly-card">
                     <div class="monthly-card-top">
                         <div class="monthly-name">June</div>
-                        <div class="monthly-trades">0 trades</div>
+                        <div class="monthly-trades">1 trade</div>
                     </div>
                     <div class="monthly-card-line"></div>
 
                     <div class="monthly-row">
                         <div class="monthly-label">TP</div>
-                        <div class="monthly-bar"><span class="monthly-fill tp" style="width:0%;"></span></div>
-                        <div class="monthly-value">0</div>
+                        <div class="monthly-bar"><span class="monthly-fill tp" style="width:100%;"></span></div>
+                        <div class="monthly-value">1</div>
                     </div>
 
                     <div class="monthly-row">
@@ -1617,24 +1617,24 @@
                     <line class="equity-grid-line" x1="70" y1="275" x2="1165" y2="275"/>
                     <line class="equity-break-line" x1="70" y1="385" x2="1165" y2="385"/>
 
-                    <text class="equity-axis-text" x="25" y="60">81R</text>
-                    <text class="equity-axis-text" x="25" y="170">48R</text>
-                    <text class="equity-axis-text" x="25" y="280">23R</text>
+                    <text class="equity-axis-text" x="25" y="60">5R</text>
+                    <text class="equity-axis-text" x="25" y="170">3R</text>
+                    <text class="equity-axis-text" x="25" y="280">1R</text>
                     <text class="equity-axis-text" x="25" y="390">0R</text>
 
                     <path class="equity-area"
-                        d="M70,385 L1165,385 L1165,385 L70,385 Z" />
+                        d="M70,385 L1165,385 L1165,55 L250,55 L70,385 Z" />
 
                     <path id="equityCurvePath" class="equity-curve"
-                        d="M70,385 L1165,385" />
+                        d="M70,385 L250,55 L1165,55" />
 
-                    <text class="equity-axis-text" x="190" y="405">#5</text>
-                    <text class="equity-axis-text" x="335" y="405">#10</text>
-                    <text class="equity-axis-text" x="485" y="405">#15</text>
-                    <text class="equity-axis-text" x="635" y="405">#20</text>
-                    <text class="equity-axis-text" x="790" y="405">#25</text>
-                    <text class="equity-axis-text" x="945" y="405">#30</text>
-                    <text class="equity-axis-text" x="1090" y="405">#35</text>
+                    <text class="equity-axis-text" x="190" y="405">#1</text>
+                    <text class="equity-axis-text" x="335" y="405">#2</text>
+                    <text class="equity-axis-text" x="485" y="405">#3</text>
+                    <text class="equity-axis-text" x="635" y="405">#4</text>
+                    <text class="equity-axis-text" x="790" y="405">#5</text>
+                    <text class="equity-axis-text" x="945" y="405">#6</text>
+                    <text class="equity-axis-text" x="1090" y="405">#7</text>
 
                     <!-- HOVER TOOLTIP SYSTEM -->
                     <g id="equityHoverGroup">
@@ -1659,7 +1659,7 @@
                 <div class="equity-stats">
                     <div class="equity-stat">
                         <div class="equity-stat-label">Peak</div>
-                        <div class="equity-stat-value">0R</div>
+                        <div class="equity-stat-value">5R</div>
                     </div>
 
                     <div class="equity-stat">
@@ -1669,7 +1669,7 @@
 
                     <div class="equity-stat">
                         <div class="equity-stat-label">Current</div>
-                        <div class="equity-stat-value">0R</div>
+                        <div class="equity-stat-value">5R</div>
                     </div>
                 </div>
             </div>
@@ -1824,14 +1824,14 @@
 
                 updateRoundDotRadius();
 
-                const tradeNo = Math.max(1, Math.min(35, Math.round(mapValue(point.x, 70, 1165, 1, 35))));
-                const cumulativeR = Math.max(0, Math.round(mapValue(385 - point.y, 0, 385 - 20, 0, 76)));
+                const tradeNo = 1;
+                const cumulativeR = Math.max(0, Math.min(5, Math.round(mapValue(385 - point.y, 0, 385 - 55, 0, 5))));
 
                 const oneTradeStep = (1165 - 70) / 34;
                 const previousX = Math.max(70, point.x - oneTradeStep);
                 const previousPoint = getPointOnCurveByX(equityCurvePath, previousX);
-                const previousR = Math.max(0, Math.round(mapValue(385 - previousPoint.y, 0, 385 - 20, 0, 76)));
-                let resultR = tradeNo === 1 ? 0 : cumulativeR - previousR;
+                const previousR = 0;
+                let resultR = 5;
                 const formattedResultR = resultR > 0 ? "+" + resultR + "R" : resultR + "R";
 
                 hoverLine.setAttribute("x1", point.x);
