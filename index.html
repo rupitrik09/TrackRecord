@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1440, initial-scale=0.25, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <style>
+        @font-face {
+            font-family: "Centauri";
+            src: url("./Centauri.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * { margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: #000; }
+
+
+        /* FORCE DESKTOP VIEW ON MOBILE */
+        html, body {
+            min-width: 1440px;
+            overflow-x: auto;
+        }
+
+        img {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            animation: fadeIn 4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 48px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 100px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.50);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 100;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-family: Arial, sans-serif;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: #fff; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.75); }
+        }
+
+
+        /* PAGE 4 - MONTHLY BREAKDOWN */
+        #monthly {
+            position: relative;
+            min-height: 100vh;
+            background: #050707;
+            overflow: hidden;
+            padding: 150px 80px 120px;
+            box-sizing: border-box;
+        }
+
+        #monthly::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.035), transparent 28%),
+                radial-gradient(circle at 80% 75%, rgba(0, 13, 255, 0.04), transparent 32%),
+                linear-gradient(180deg, rgba(255,255,255,0.02), transparent 45%);
+            pointer-events: none;
+        }
+
+        .monthly-wrap {
+            position: relative;
+            z-index: 2;
+            width: calc(100% - 80px);
+            max-width: 1450px;
+            margin: 0 auto;
+        }
+
+        .monthly-count {
+            color: rgba(255, 0, 0, 0.35);
+            font-family: "Times New Roman", serif;
+            font-size: 14px;
+            letter-spacing: 0.12em;
+            margin-bottom: 18px;
+        }
+
+        .monthly-title {
+            color: #fff;
+            font-family: "Centauri", serif;
+            font-size: 42px;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            margin-bottom: 48px;
+        }
+
+        .monthly-line {
+            width: 100%;
+            height: 1px;
+            background: rgba(255,255,255,0.12);
+            margin-bottom: 46px;
+        }
+
+        .monthly-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .monthly-card {
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.015);
+            padding: 36px 28px 30px;
+            min-height: 170px;
+            transition: transform 0.45s ease, border-color 0.45s ease, background 0.45s ease, box-shadow 0.45s ease;
+        }
+
+        .monthly-card:hover {
+            transform: translateY(-8px) scale(1.015);
+            border-color: rgba(255,255,255,0.28);
+            background: rgba(255,255,255,0.035);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 35px rgba(255,255,255,0.05);
+        }
+
+        .monthly-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 34px;
+        }
+
+        .monthly-name {
+            color: #fff;
+            font-family: "Times New Roman", serif;
+            font-size: 27px;
+            font-weight: 300;
+        }
+
+        .monthly-trades {
+            color: rgba(255,255,255,0.42);
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+        }
+
+        .monthly-card-line {
+            height: 1px;
+            width: 100%;
+            background: rgba(255,255,255,0.09);
+            margin-bottom: 22px;
+        }
+
+        .monthly-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 24px;
+            align-items: center;
+            gap: 14px;
+            margin: 13px 0;
+        }
+
+        .monthly-label {
+            color: rgba(255,255,255,0.43);
+            font-family: "Courier New", monospace;
+            font-size: 12px;
+        }
+
+        .monthly-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            overflow: hidden;
+            border-radius: 50px;
+        }
+
+        .monthly-fill {
+            display: block;
+            height: 100%;
+            border-radius: 50px;
+        }
+
+        .monthly-fill.tp {
+            background: #2c2cff;
+            box-shadow: 0 0 12px rgba(0,184,117,0.45);
+        }
+
+        .monthly-fill.sl {
+            background: #6d6d6d;
+            box-shadow: 0 0 12px rgba(255,46,70,0.38);
+        }
+
+        .monthly-fill.be {
+            background: #aeaeae;
+            box-shadow: 0 0 12px rgba(255,212,0,0.35);
+        }
+
+        .monthly-value {
+            color: rgba(255,255,255,0.75);
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+            text-align: right;
+        }
+
+        @media (max-width: 1100px) {
+            #monthly {
+                padding: 140px 35px 100px;
+            }
+
+            .monthly-wrap {
+                width: 100%;
+            }
+
+            .monthly-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .monthly-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .monthly-title {
+                font-size: 34px;
+            }
+        }
+
+
+        /* PAGE 5 - EQUITY CURVE */
+        #equity {
+            position: relative;
+            min-height: 100vh;
+            background: #050707;
+            overflow: hidden;
+            padding: 135px 55px 95px;
+            box-sizing: border-box;
+        }
+
+        #equity::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(255,255,255,0.03), transparent 28%),
+                radial-gradient(circle at 85% 70%, rgba(44,44,255,0.04), transparent 34%),
+                linear-gradient(180deg, rgba(255,255,255,0.018), transparent 50%);
+            pointer-events: none;
+        }
+
+        .equity-wrap {
+            position: relative;
+            z-index: 2;
+            width: calc(100% - 40px);
+            max-width: 1550px;
+            margin: 0 auto;
+        }
+
+        .equity-count {
+            color: rgba(255,255,255,0.35);
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            letter-spacing: 0.12em;
+            margin-bottom: 18px;
+        }
+
+        .equity-title {
+            color: #fff;
+            font-family: "Centauri", serif;
+            font-size: 46px;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+
+        .equity-subtitle {
+            color: rgba(255,255,255,0.45);
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            letter-spacing: 0.08em;
+            margin-bottom: 52px;
+        }
+
+        .equity-line {
+            width: 100%;
+            height: 1px;
+            background: rgba(255,255,255,0.12);
+            margin-bottom: 46px;
+        }
+
+        .equity-card {
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.012);
+            padding: 32px 34px 30px;
+            min-height: 560px;
+            box-sizing: border-box;
+            transition: transform 0.45s ease, border-color 0.45s ease, background 0.45s ease, box-shadow 0.45s ease;
+        }
+
+        .equity-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255,255,255,0.24);
+            background: rgba(255,255,255,0.025);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.45), 0 0 45px rgba(44,44,255,0.05);
+        }
+
+        .equity-legend {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+            margin-bottom: 30px;
+            padding-left: 2px;
+        }
+
+        .equity-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255,255,255,0.52);
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .equity-legend-line {
+            width: 16px;
+            height: 2px;
+            background: hsl(238, 100%, 62%);
+            box-shadow: 0 0 10px rgba(44,44,255,0.5);
+        }
+
+        .equity-legend-line.break {
+            background: rgba(255,255,255,0.22);
+            box-shadow: none;
+        }
+
+        .equity-chart {
+            width: 100%;
+            height: 380px;
+            display: block;
+        }
+
+        .equity-axis-text {
+            fill: rgba(255,255,255,0.42);
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+        }
+
+        .equity-grid-line {
+            stroke: rgba(255,255,255,0.07);
+            stroke-width: 1;
+            stroke-dasharray: 4 5;
+        }
+
+        .equity-break-line {
+            stroke: rgba(255,255,255,0.14);
+            stroke-width: 1.5;
+            stroke-dasharray: 8 6;
+        }
+
+        .equity-area {
+            fill: url(#equityGradient);
+            opacity: 0.85;
+        }
+
+        .equity-curve {
+            fill: none;
+            stroke: #2c5aff;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 8px rgba(44,44,255,0.45));
+        }
+
+        .equity-stats {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 34px;
+            padding-top: 28px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .equity-stat-label {
+            color: rgba(255,255,255,0.42);
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .equity-stat-value {
+            color: #2c5aff;
+            font-family: "Centauri", serif;
+            font-size: 25px;
+            text-shadow: 0 0 14px rgba(44,44,255,0.35);
+        }
+
+        .equity-stat:nth-child(2) {
+            text-align: center;
+        }
+
+        .equity-stat:nth-child(3) {
+            text-align: right;
+        }
+
+        @media (max-width: 900px) {
+            #equity {
+                padding: 125px 24px 80px;
+            }
+
+            .equity-wrap {
+                width: 100%;
+            }
+
+            .equity-title {
+                font-size: 36px;
+            }
+
+            .equity-card {
+                padding: 24px 18px 24px;
+            }
+
+            .equity-chart {
+                height: 330px;
+            }
+
+            .equity-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .equity-stat,
+            .equity-stat:nth-child(2),
+            .equity-stat:nth-child(3) {
+                text-align: left;
+            }
+        }
+
+
+        /* EQUITY HOVER TOOLTIP */
+        .equity-hover-line {
+            stroke: rgba(255,255,255,0.16);
+            stroke-width: 1.4;
+            stroke-dasharray: 6 6;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .equity-hover-dot {
+            fill: #2c2cff;
+            stroke: #050707;
+            stroke-width: 4;
+            filter: drop-shadow(0 0 8px rgba(44,44,255,0.65));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .equity-tooltip {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .equity-tooltip-box {
+            fill: rgba(20,20,24,0.96);
+            stroke: rgba(255,255,255,0.12);
+            stroke-width: 1;
+        }
+
+        .equity-tooltip-title {
+            fill: rgba(255,255,255,0.52);
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+            letter-spacing: 0.12em;
+        }
+
+        .equity-tooltip-value {
+            fill: #fff;
+            font-family: "Centauri", serif;
+            font-size: 24px;
+        }
+
+        .equity-tooltip-result {
+            fill: #2c2cff;
+            font-family: "Courier New", monospace;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .equity-tooltip-small {
+            fill: rgba(255,255,255,0.45);
+            font-family: "Courier New", monospace;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+        }
+
+        .equity-hover-line,
+        .equity-hover-dot,
+        .equity-tooltip {
+            transition: opacity 0.16s ease;
+        }
+
+
+        /* MONTHLY TO EQUITY BACKGROUND BLEND FIX */
+        #monthly,
+        #equity {
+            background: #050707;
+        }
+
+        #monthly::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 320px;
+            background: linear-gradient(180deg, rgba(5,7,7,0), #050707 72%, #050707);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #equity::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 320px;
+            background: linear-gradient(180deg, #050707 0%, rgba(5,7,7,0.96) 45%, rgba(5,7,7,0) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #monthly {
+            margin-bottom: -2px;
+        }
+
+        #equity {
+            margin-top: -2px;
+        }
+
+
+
+
+        /* PAGE 6 - END PAGE */
+        #endpage {
+            position: relative;
+            min-height: 100vh;
+            background: #050707;
+            overflow: hidden;
+            padding: 145px 60px 64px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #endpage::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 22% 32%, rgba(255,255,255,0.035), transparent 20%),
+                radial-gradient(circle at 78% 30%, rgba(44,44,255,0.035), transparent 24%),
+                radial-gradient(circle at 50% 72%, rgba(255,255,255,0.025), transparent 34%),
+                linear-gradient(180deg, #050707 0%, #070909 48%, #050707 100%);
+            pointer-events: none;
+        }
+
+        #endpage::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: none;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .endpage-wrap {
+            position: relative;
+            z-index: 2;
+            width: min(1120px, 100%);
+            min-height: calc(100vh - 220px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            padding-top: 70px;
+        }
+
+        .endpage-kicker {
+            color: rgba(255,255,255,0.55);
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            margin-bottom: 54px;
+        }
+
+        .endpage-title {
+            color: rgba(255,255,255,0.92);
+            font-family: "Times New Roman", serif;
+            font-size: clamp(54px, 7vw, 92px);
+            font-weight: 300;
+            line-height: 0.92;
+            letter-spacing: -0.055em;
+            margin-bottom: 20px;
+        }
+
+        .endpage-title span {
+            display: block;
+            color: #2c2cff;
+            font-style: italic;
+            text-shadow: 0 0 28px rgba(44,44,255,0.18);
+        }
+
+        .endpage-subtitle {
+            max-width: 610px;
+            color: rgba(255,255,255,0.62);
+            font-family: "Courier New", monospace;
+            font-size: 16px;
+            line-height: 1.65;
+            letter-spacing: 0.055em;
+            margin-top: 44px;
+            margin-bottom: 58px;
+        }
+
+        .endpage-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            min-width: 318px;
+            height: 64px;
+            border: 1px solid rgba(44,44,255,0.55);
+            background: rgba(255,255,255,0.018);
+            color: rgba(255,255,255,0.96);
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: transform 0.42s ease, background 0.42s ease, border-color 0.42s ease, box-shadow 0.42s ease;
+        }
+
+        .endpage-button::before {
+            content: "";
+            position: absolute;
+            inset: 1px;
+            border: 1px solid rgba(255,255,255,0.04);
+            pointer-events: none;
+        }
+
+        .endpage-button:hover {
+            transform: translateY(-4px) scale(1.025);
+            background: rgba(44,44,255,0.08);
+            border-color: rgba(255,255,255,0.55);
+            box-shadow: 0 22px 60px rgba(0,0,0,0.45), 0 0 36px rgba(44,44,255,0.16);
+        }
+
+        .endpage-button-dot {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.94);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 0 18px rgba(255,255,255,0.22);
+        }
+
+        .endpage-disclaimer {
+            max-width: 1250px;
+            color: rgba(255,255,255,0.38);
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            letter-spacing: 0.055em;
+            margin-top: auto;
+            padding-top: 70px;
+        }
+
+        .endpage-footer {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            color: rgba(255,255,255,0.52);
+            font-family: "Courier New", monospace;
+            font-size: 16px;
+            letter-spacing: 0.18em;
+            text-align: center;
+            padding-top: 35px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 800px) {
+            #endpage {
+                padding: 130px 24px 56px;
+            }
+
+            .endpage-kicker {
+                font-size: 12px;
+                letter-spacing: 0.28em;
+                margin-bottom: 40px;
+            }
+
+            .endpage-title {
+                font-size: 48px;
+            }
+
+            .endpage-subtitle {
+                font-size: 14px;
+                margin-top: 34px;
+                margin-bottom: 44px;
+            }
+
+            .endpage-button {
+                min-width: 260px;
+                height: 58px;
+                font-size: 12px;
+                letter-spacing: 0.22em;
+            }
+
+            .endpage-button-dot {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+
+        /* MOBILE RESPONSIVE OPTIMIZATION - DESKTOP UNCHANGED */
+        @media (max-width: 768px) {
+            html, body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+                background: #000;
+            }
+
+            img {
+                height: 100svh;
+                object-fit: cover;
+            }
+
+            body > img[style*="position:fixed"] {
+                width: 56px !important;
+                height: 56px !important;
+                top: 5px !important;
+                left: 12px !important;
+                z-index: 100000 !important;
+            }
+
+            body > a[style*="position:fixed"] {
+                top: 15px !important;
+                right: 12px !important;
+                padding: 8px 14px !important;
+                font-size: 9px !important;
+                letter-spacing: 0.16em !important;
+            }
+
+            nav {
+                top: 64px;
+                padding: 10px 0;
+                justify-content: flex-start;
+                overflow-x: auto;
+                overflow-y: hidden;
+                background: rgba(0,0,0,0.32);
+                backdrop-filter: blur(22px);
+                -webkit-backdrop-filter: blur(22px);
+                scrollbar-width: none;
+            }
+
+            nav::-webkit-scrollbar {
+                display: none;
+            }
+
+            .nav-links {
+                gap: 26px;
+                padding: 0 18px;
+                width: max-content;
+                min-width: max-content;
+            }
+
+            .nav-links a {
+                font-size: 10px;
+                letter-spacing: 0.16em;
+                white-space: nowrap;
+            }
+
+            #home > .home-live-tag {
+                top: 155px !important;
+                padding: 10px 24px !important;
+                font-size: 11px !important;
+                letter-spacing: 0.18em !important;
+                gap: 8px !important;
+                white-space: nowrap !important;
+            }
+
+            #home > .home-live-tag > span {
+                width: 6px !important;
+                height: 6px !important;
+                min-width: 6px !important;
+            }
+
+            #performance > div {
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 20% !important;
+                padding: 0 16px !important;
+                display: flex !important;
+                justify-content: center !important;
+                gap: 12px !important;
+                flex-wrap: wrap !important;
+                box-sizing: border-box !important;
+            }
+
+            #performance > div > a {
+                padding: 13px 20px !important;
+                font-size: 10px !important;
+                letter-spacing: 0.16em !important;
+                min-width: 135px !important;
+                text-align: center !important;
+                box-sizing: border-box !important;
+            }
+
+            #trades > div {
+                top: 190px !important;
+                left: 0 !important;
+                right: 0 !important;
+                padding: 0 16px !important;
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                -webkit-overflow-scrolling: touch !important;
+                box-sizing: border-box !important;
+            }
+
+            #trades > div > div {
+                min-width: 1420px !important;
+            }
+
+            #monthly {
+                padding: 120px 18px 80px !important;
+                min-height: auto;
+            }
+
+            .monthly-wrap {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .monthly-title {
+                font-size: 28px !important;
+                line-height: 1.08;
+                margin-bottom: 34px;
+            }
+
+            .monthly-line {
+                margin-bottom: 30px;
+            }
+
+            .monthly-grid {
+                grid-template-columns: 1fr !important;
+                gap: 18px;
+            }
+
+            .monthly-card {
+                padding: 26px 20px 24px;
+                min-height: auto;
+            }
+
+            .monthly-name {
+                font-size: 24px;
+            }
+
+            #equity {
+                padding: 120px 18px 78px !important;
+                min-height: auto;
+            }
+
+            .equity-wrap {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .equity-title {
+                font-size: 32px !important;
+                line-height: 1.05;
+            }
+
+            .equity-subtitle {
+                font-size: 12px;
+                line-height: 1.5;
+                margin-bottom: 34px;
+            }
+
+            .equity-line {
+                margin-bottom: 28px;
+            }
+
+            .equity-card {
+                padding: 22px 16px 22px !important;
+                min-height: auto;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .equity-legend {
+                gap: 18px;
+                margin-bottom: 22px;
+                min-width: 720px;
+            }
+
+            .equity-legend-item {
+                font-size: 11px;
+                letter-spacing: 0.09em;
+            }
+
+            .equity-chart {
+                min-width: 720px;
+                height: 310px !important;
+            }
+
+            .equity-stats {
+                min-width: 720px;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px;
+                margin-top: 24px;
+                padding-top: 22px;
+            }
+
+            .equity-stat-value {
+                font-size: 22px;
+            }
+
+            #endpage {
+                padding: 120px 18px 86px !important;
+                min-height: 100svh;
+            }
+
+            .endpage-wrap {
+                width: 100% !important;
+                min-height: calc(100svh - 210px);
+                padding-top: 44px !important;
+            }
+
+            .endpage-kicker {
+                padding: 10px 22px !important;
+                font-size: 11px !important;
+                letter-spacing: 0.18em !important;
+                margin-bottom: 42px !important;
+                white-space: nowrap;
+            }
+
+            .endpage-title {
+                font-size: 46px !important;
+                line-height: 0.98;
+                letter-spacing: -0.045em;
+            }
+
+            .endpage-subtitle {
+                max-width: 92%;
+                font-size: 13px !important;
+                line-height: 1.65;
+                margin-top: 34px !important;
+                margin-bottom: 38px !important;
+            }
+
+            .endpage-disclaimer {
+                max-width: 96%;
+                font-size: 10.5px !important;
+                line-height: 1.65;
+                letter-spacing: 0.02em;
+                padding-top: 36px !important;
+            }
+
+            .endpage-disclaimer br {
+                display: none;
+            }
+
+            .endpage-footer {
+                font-size: 11px !important;
+                letter-spacing: 0.08em;
+                padding-top: 24px !important;
+                margin-bottom: 54px !important;
+            }
+
+            body > div[style*="position:fixed; bottom:28px"] {
+                bottom: 18px !important;
+                width: 38px !important;
+                height: 38px !important;
+            }
+
+            body > div[style*="position:fixed; bottom:28px"] svg {
+                width: 38px !important;
+                height: 38px !important;
+            }
+        }
+
+        @media (max-width: 420px) {
+            #home > .home-live-tag {
+                top: 145px !important;
+                padding: 9px 18px !important;
+                font-size: 10px !important;
+                letter-spacing: 0.15em !important;
+            }
+
+            #performance > div > a {
+                min-width: 128px !important;
+                padding: 12px 16px !important;
+                font-size: 9px !important;
+            }
+
+            .monthly-title,
+            .equity-title {
+                font-size: 27px !important;
+            }
+
+            .endpage-title {
+                font-size: 40px !important;
+            }
+        }
+
+
+
+        /* MOBILE 3-DOT SLIDE NAV - DESKTOP UNCHANGED */
+        .mobile-nav-toggle {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) and (hover: none) and (pointer: coarse) {
+            .mobile-nav-toggle {
+                position: fixed;
+                top: 14px;
+                left: 14px;
+                z-index: 100002;
+                width: 39px;
+                height: 34px;
+                border-radius: 999px;
+                border: 1px solid rgba(255,255,255,0.18);
+                background: rgba(255,255,255,0.07);
+                backdrop-filter: blur(22px);
+                -webkit-backdrop-filter: blur(22px);
+                box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 8px 28px rgba(0,0,0,0.28);
+                color: rgba(255,255,255,0.92);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                line-height: 1;
+                letter-spacing: 1px;
+                cursor: pointer;
+                transition: transform 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+            }
+
+            .mobile-nav-toggle:active {
+                transform: scale(0.94);
+                background: rgba(255,255,255,0.13);
+                border-color: rgba(255,255,255,0.32);
+            }
+
+            body > img[style*="position:fixed"] {
+                display: none !important;
+            }
+
+            body > a[style*="position:fixed"] {
+                top: 14px !important;
+                right: 14px !important;
+                padding: 7px 12px !important;
+                font-size: 8px !important;
+                letter-spacing: 0.14em !important;
+                z-index: 100001 !important;
+            }
+
+            nav {
+                top: 0 !important;
+                left: auto !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                width: min(78vw, 310px) !important;
+                height: 100svh !important;
+                padding: 96px 28px 34px !important;
+                box-sizing: border-box !important;
+                justify-content: flex-start !important;
+                align-items: flex-start !important;
+                overflow: hidden !important;
+                border-bottom: none !important;
+                border-left: 1px solid rgba(255,255,255,0.11) !important;
+                background: rgba(5,7,7,0.82) !important;
+                backdrop-filter: blur(30px) !important;
+                -webkit-backdrop-filter: blur(30px) !important;
+                box-shadow: -28px 0 80px rgba(0,0,0,0.48) !important;
+                transform: translateX(108%) !important;
+                transition: transform 0.58s cubic-bezier(0.22, 1, 0.36, 1) !important;
+            }
+
+            nav.mobile-open {
+                transform: translateX(0) !important;
+            }
+
+            .nav-links {
+                width: 100% !important;
+                min-width: 0 !important;
+                padding: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 0 !important;
+            }
+
+            .nav-links li {
+                width: 100% !important;
+                border-bottom: 1px solid rgba(255,255,255,0.075);
+            }
+
+            .nav-links a {
+                display: block !important;
+                padding: 18px 0 !important;
+                font-size: 12px !important;
+                letter-spacing: 0.22em !important;
+                white-space: normal !important;
+                color: rgba(255,255,255,0.64) !important;
+            }
+
+            .nav-links a:hover {
+                color: #fff !important;
+            }
+        }
+
+        @media (min-width: 769px), (hover: hover) and (pointer: fine) {
+            .mobile-nav-toggle {
+                display: none !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
+            }
+        }
+
+
+        /* REAL PHONE LANDING IMAGE ONLY - PC / DESKTOP UNCHANGED */
+        @media (max-width: 768px) and (hover: none) and (pointer: coarse) {
+            #home > img.hero-mobile-bg {
+                content: url("phero.png") !important;
+                width: 100% !important;
+                height: 100svh !important;
+                object-fit: cover !important;
+                object-position: center center !important;
+            }
+
+            #home > .home-live-tag {
+                display: none !important;
+            }
+        }
+
+        /* SCROLL REVEAL ANIMATIONS - GLITCH/FILTER FLASH FIX */
+        [data-reveal] {
+            opacity: 0;
+            will-change: opacity, transform;
+        }
+
+        [data-reveal="up"] { transform: translateY(34px); }
+        [data-reveal="down"] { transform: translateY(-24px); }
+        [data-reveal="left"] { transform: translateX(-30px); }
+        [data-reveal="right"] { transform: translateX(30px); }
+        [data-reveal="zoom"] { transform: scale(0.96); }
+        [data-reveal="fade"] { transform: none; }
+
+        [data-reveal].is-visible {
+            opacity: 1;
+            transform: var(--reveal-final-transform, none);
+            transition:
+                opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+            transition-delay: var(--reveal-delay, 0ms);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            [data-reveal] {
+                opacity: 1 !important;
+                transform: var(--reveal-final-transform, none) !important;
+                transition: none !important;
+            }
+        }
+
+
+
+        /* RESTORE CARD HOVER ZOOM AFTER SCROLL REVEAL */
+        .monthly-card.is-visible:hover,
+        .monthly-card:hover {
+            transform: translateY(-8px) scale(1.015) !important;
+            border-color: rgba(255,255,255,0.28) !important;
+            background: rgba(255,255,255,0.035) !important;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 35px rgba(255,255,255,0.05) !important;
+        }
+
+        .equity-card.is-visible:hover,
+        .equity-card:hover {
+            transform: translateY(-6px) scale(1.01) !important;
+            border-color: rgba(255,255,255,0.24) !important;
+            background: rgba(255,255,255,0.025) !important;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.45), 0 0 45px rgba(44,44,255,0.05) !important;
+        }
+
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(a => {
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) target.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            setupScrollRevealAnimations();
+        });
+
+        function setupScrollRevealAnimations() {
+            const revealItems = [
+                { selector: 'nav', type: 'down', delay: 0 },
+                { selector: 'body > img[style*="position:fixed"]', type: 'left', delay: 80 },
+                { selector: 'body > a[style*="position:fixed"]', type: 'right', delay: 120 },
+                { selector: '#home > .home-live-tag', type: 'zoom', delay: 180 },
+                { selector: '#performance a:nth-child(1)', type: 'left', delay: 80 },
+                { selector: '#performance a:nth-child(2)', type: 'right', delay: 160 },
+                { selector: '#trades > div > div', type: 'up', stagger: 70 },
+                { selector: '#monthly .monthly-title', type: 'up', delay: 0 },
+                { selector: '#monthly .monthly-line', type: 'fade', delay: 90 },
+                { selector: '#monthly .monthly-card', type: 'up', stagger: 120 },
+                { selector: '#equity .equity-count', type: 'up', delay: 0 },
+                { selector: '#equity .equity-title', type: 'up', delay: 80 },
+                { selector: '#equity .equity-subtitle', type: 'up', delay: 130 },
+                { selector: '#equity .equity-line', type: 'fade', delay: 170 },
+                { selector: '#equity .equity-card', type: 'up', delay: 220 }
+            ];
+
+            const elements = [];
+            const seenElements = new Set();
+
+            revealItems.forEach((item) => {
+                document.querySelectorAll(item.selector).forEach((el, index) => {
+                    if (seenElements.has(el)) return;
+                    seenElements.add(el);
+
+                    const baseTransform = el.style.transform || '';
+                    el.dataset.reveal = item.type;
+                    el.style.setProperty('--reveal-final-transform', baseTransform && baseTransform !== 'none' ? baseTransform : 'none');
+                    el.style.setProperty('--reveal-delay', (item.delay || (item.stagger ? index * item.stagger : 0)) + 'ms');
+                    elements.push(el);
+                });
+            });
+
+            if (!('IntersectionObserver' in window)) {
+                elements.forEach((el) => el.classList.add('is-visible'));
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+
+                    const el = entry.target;
+                    if (el.classList.contains('is-visible')) {
+                        observer.unobserve(el);
+                        return;
+                    }
+
+                    requestAnimationFrame(() => {
+                        el.classList.add('is-visible');
+                    });
+
+                    observer.unobserve(el);
+                });
+            }, { threshold: 0.16, rootMargin: '0px 0px -55px 0px' });
+
+            elements.forEach((el) => observer.observe(el));
+        }
+
+        function getRevealStartTransform(type, baseTransform) {
+            const base = baseTransform && baseTransform !== 'none' ? baseTransform : '';
+            const movement = {
+                up: 'translateY(46px)',
+                down: 'translateY(-34px)',
+                left: 'translateX(-42px)',
+                right: 'translateX(42px)',
+                zoom: 'scale(0.92)',
+                fade: 'scale(1.02)'
+            }[type] || 'translateY(46px)';
+
+            return base ? base + ' ' + movement : movement;
+        }
+    </script>
+</head>
+<body>
+
+    <!-- LOGO -->
+    <img src="logo.png" style="position:fixed; top:3px; left:48px; width:90px; height:90px; object-fit:contain; z-index:99999; animation:none;">
+
+
+
+    <!-- MOBILE 3-DOT MENU BUTTON -->
+    <button class="mobile-nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">•••</button>
+
+    <nav>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#performance">Performance</a></li>
+            <li><a href="#trades">All Trades</a></li>
+            <li><a href="#monthly">M/O Breakdown</a></li>
+            <li><a href="#equity">Equity Curve</a></li>
+        </ul>
+    </nav>
+
+    <!-- PORTFOLIO BUTTON -->
+    <a href="#" style="position:fixed; top:28px; right:48px; z-index:99999; padding:10px 26px; border-radius:50px; border:1px solid rgba(255, 255, 255, 0.222); background:rgba(245, 245, 245, 0.034); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(30px); box-shadow:inset 0 1.5px 0 rgba(255, 255, 255, 0), 0 4px 24px rgba(0,0,0,0.25); color:rgba(255,255,255,0.95); font-size:11px; font-weight:300; letter-spacing:0.25em; text-transform:uppercase; text-decoration:none; font-family:Arial,sans-serif; transition:all 0.4s ease;"
+    onmouseover="this.style.transform='scale(1.03)'; this.style.background='rgba(255,255,255,0.09)';"
+    onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(245,245,245,0.034)';">Portfolio</a>
+
+    <!-- PAGE 1 - HERO -->
+    <div id="home" style="position:relative;">
+        <img class="hero-mobile-bg" src="hero.png">
+        <a href="https://www.youtube.com/@RupitrikLive" class="home-live-tag" style="position:absolute; top:190px; left:50%; transform:translateX(-50%); z-index:10; padding:14px 55px; border-radius:50px; border:1px solid rgba(255, 255, 255, 0.222); background:rgba(245, 245, 245, 0.034); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(30px); box-shadow:inset 0 1.5px 0 rgba(255, 255, 255, 0), 0 4px 24px rgba(0,0,0,0.25); color:rgb(255, 255, 255); font-size:14px; letter-spacing:0.25em; text-transform:uppercase; text-decoration:none; font-family:Arial,sans-serif; display:flex; align-items:center; gap:10px; transition:all 0.4s ease; cursor:pointer; appearance:none; -webkit-appearance:none;"
+        onmouseover="this.style.transform='translateX(-50%) scale(1.03)'; this.style.background='rgba(255,255,255,0.09)';"
+        onmouseout="this.style.transform='translateX(-50%) scale(1)'; this.style.background='rgba(245,245,245,0.034)';">
+            RUPITRIK &nbsp; LIVE
+            <span style="width:7px; height:7px; background:#ffffff; border-radius:50%; display:inline-block;"></span>
+        </a>
+    </div>
+
+    <!-- PAGE 2 - PERFORMANCE -->
+    <div id="performance" style="position:relative;">
+        <img src="pg1.png">
+        <div style="position:absolute; bottom:35%; left:20px; display:flex; gap:16px;">
+            <a href="#equity" style="padding:18px 50px; border-radius:50px; border:1px solid rgba(255, 255, 255, 0.222); background:rgba(245, 245, 245, 0.034); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(30px); box-shadow:inset 0 1.5px 0 rgba(255, 255, 255, 0), 0 4px 24px rgba(0,0,0,0.25); color:rgba(255,255,255,0.9); font-size:13px; font-weight:300; letter-spacing:0.22em; text-transform:uppercase; text-decoration:none; font-family:Arial,sans-serif; transition:all 0.4s ease;"
+            onmouseover="this.style.transform='scale(1.03)'; this.style.background='rgba(255,255,255,0.09)';"
+            onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(245,245,245,0.034)';">EQUITY CURVE</a>
+
+            <a href="#trades" style="padding:18px 50px; border-radius:50px; border:1px solid rgba(255, 255, 255, 0.222); background:rgba(245, 245, 245, 0.034); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(30px); box-shadow:inset 0 1.5px 0 rgba(255, 255, 255, 0), 0 4px 24px rgba(0,0,0,0.25); color:rgba(255,255,255,0.9); font-size:13px; font-weight:300; letter-spacing:0.22em; text-transform:uppercase; text-decoration:none; font-family:Arial,sans-serif; transition:all 0.4s ease;"
+            onmouseover="this.style.transform='scale(1.03)'; this.style.background='rgba(255,255,255,0.09)';"
+            onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(245,245,245,0.034)';">ALL TRADES</a>
+        </div>
+    </div>
+
+    <!-- PAGE 3 - ALL TRADES -->
+    <div id="trades" style="position:relative;">
+        <img src="pg2.png">
+        <div style="position:absolute; top:250px; left:0; right:0; padding:0 60px;">
+            <div style="display:grid; grid-template-columns:80px 250px 240px 255px 250px 245px 100px; padding:20px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
+                <span style="color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:0.15em; font-family:Arial;">#</span>
+                <span style="color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:0.15em; font-family:Arial;">DATE</span>
+                <span style="color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:0.15em; font-family:Arial;">PAIR</span>
+                <span style="color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:0.15em; font-family:Arial;">DIRECTION</span>
+                <span style="color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:0.15em; font-family:Arial;">RESULT</span>
+                <span style="color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:0.15em; font-family:Arial;">NO. OF TRADES</span>
+                <span style="color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:0.15em; font-family:Arial;">R:R</span>
+            </div>
+            <!-- TRADE 1 -->
+            <div style="display:grid; grid-template-columns:80px 250px 240px 255px 250px 245px 100px; padding:22px 0; border-bottom:1px solid rgba(255,255,255,0.06); align-items:center;">
+                <span style="color:rgba(255,255,255,0.5); font-family:Arial; font-size:13px;"># 01</span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
+                <span><span style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:4px 16px; border-radius:20px; color:#fff; font-size:11px;">*</span></span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
+                <span style="color:rgba(255,255,255,0.8); font-family:Arial; font-size:13px;">*</span>
+            </div>
+        </div>
+    </div>
+
+   
+
+
+    <!-- PAGE 4 - MONTHLY BREAKDOWN -->
+    <div id="monthly">
+        <div class="monthly-wrap">
+            <div class="monthly-count"></div>
+            <h2 class="monthly-title">MONTHLY BREAKDOWN</h2>
+            <div class="monthly-line"></div>
+
+            <div class="monthly-grid">
+
+                <!-- JUNE -->
+                <div class="monthly-card">
+                    <div class="monthly-card-top">
+                        <div class="monthly-name">June</div>
+                        <div class="monthly-trades">0 trades</div>
+                    </div>
+                    <div class="monthly-card-line"></div>
+
+                    <div class="monthly-row">
+                        <div class="monthly-label">TP</div>
+                        <div class="monthly-bar"><span class="monthly-fill tp" style="width:0%;"></span></div>
+                        <div class="monthly-value">0</div>
+                    </div>
+
+                    <div class="monthly-row">
+                        <div class="monthly-label">SL</div>
+                        <div class="monthly-bar"><span class="monthly-fill sl" style="width:0%;"></span></div>
+                        <div class="monthly-value">0</div>
+                    </div>
+
+                    <div class="monthly-row">
+                        <div class="monthly-label">BE</div>
+                        <div class="monthly-bar"><span class="monthly-fill be" style="width:0%;"></span></div>
+                        <div class="monthly-value">0</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- PAGE 5 - EQUITY CURVE -->
+    <div id="equity">
+        <div class="equity-wrap">
+            <div class="equity-count">04</div>
+            <h2 class="equity-title">Equity Curve</h2>
+            <p class="equity-subtitle">Cumulative R growth across all livestream trades</p>
+            <div class="equity-line"></div>
+
+            <div class="equity-card">
+                <div class="equity-legend">
+                    <div class="equity-legend-item">
+                        <span class="equity-legend-line"></span>
+                        <span>Cumulative R</span>
+                    </div>
+
+                    <div class="equity-legend-item">
+                        <span class="equity-legend-line break"></span>
+                        <span>Breakeven</span>
+                    </div>
+                </div>
+
+                <svg id="equityChartSvg" class="equity-chart" viewBox="0 0 1200 420" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="equityGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#2c2cff" stop-opacity="0.28"/>
+                            <stop offset="100%" stop-color="#2c2cff" stop-opacity="0.02"/>
+                        </linearGradient>
+                    </defs>
+
+                    <line class="equity-grid-line" x1="70" y1="55" x2="1165" y2="55"/>
+                    <line class="equity-grid-line" x1="70" y1="165" x2="1165" y2="165"/>
+                    <line class="equity-grid-line" x1="70" y1="275" x2="1165" y2="275"/>
+                    <line class="equity-break-line" x1="70" y1="385" x2="1165" y2="385"/>
+
+                    <text class="equity-axis-text" x="25" y="60">81R</text>
+                    <text class="equity-axis-text" x="25" y="170">48R</text>
+                    <text class="equity-axis-text" x="25" y="280">23R</text>
+                    <text class="equity-axis-text" x="25" y="390">0R</text>
+
+                    <path class="equity-area"
+                        d="M70,385 L1165,385 L1165,385 L70,385 Z" />
+
+                    <path id="equityCurvePath" class="equity-curve"
+                        d="M70,385 L1165,385" />
+
+                    <text class="equity-axis-text" x="190" y="405">#5</text>
+                    <text class="equity-axis-text" x="335" y="405">#10</text>
+                    <text class="equity-axis-text" x="485" y="405">#15</text>
+                    <text class="equity-axis-text" x="635" y="405">#20</text>
+                    <text class="equity-axis-text" x="790" y="405">#25</text>
+                    <text class="equity-axis-text" x="945" y="405">#30</text>
+                    <text class="equity-axis-text" x="1090" y="405">#35</text>
+
+                    <!-- HOVER TOOLTIP SYSTEM -->
+                    <g id="equityHoverGroup">
+                        <line id="equityHoverLine" class="equity-hover-line" x1="0" y1="55" x2="0" y2="385"></line>
+                        <ellipse id="equityHoverDot" class="equity-hover-dot" cx="0" cy="0" rx="6" ry="6"></ellipse>
+
+                        <g id="equityTooltip" class="equity-tooltip">
+                            <rect class="equity-tooltip-box" x="0" y="0" width="210" height="112"></rect>
+                            <text id="equityTooltipTitle" class="equity-tooltip-title" x="20" y="30">TRADE #25 — APR 14</text>
+
+                            <text id="equityTooltipValue" class="equity-tooltip-value" x="20" y="72">0R</text>
+                            <text class="equity-tooltip-small" x="20" y="94">CUMULATIVE</text>
+
+                            <text id="equityTooltipResult" class="equity-tooltip-result" x="125" y="70">0R</text>
+                            <text class="equity-tooltip-small" x="125" y="94">TP</text>
+                        </g>
+
+                        <rect id="equityHoverArea" x="70" y="45" width="1095" height="360" fill="transparent"></rect>
+                    </g>
+                </svg>
+
+                <div class="equity-stats">
+                    <div class="equity-stat">
+                        <div class="equity-stat-label">Peak</div>
+                        <div class="equity-stat-value">0R</div>
+                    </div>
+
+                    <div class="equity-stat">
+                        <div class="equity-stat-label">Lowest</div>
+                        <div class="equity-stat-value">0R</div>
+                    </div>
+
+                    <div class="equity-stat">
+                        <div class="equity-stat-label">Current</div>
+                        <div class="equity-stat-value">0R</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- PAGE 6 - END PAGE -->
+    <div id="endpage">
+        <div class="endpage-wrap">
+            <a href="https://www.youtube.com/@RupitrikLive" class="endpage-kicker" style="padding:14px 55px; border-radius:50px; border:1px solid rgba(255, 255, 255, 0.222); background:rgba(245, 245, 245, 0.034); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(30px); box-shadow:inset 0 1.5px 0 rgba(255, 255, 255, 0), 0 4px 24px rgba(0,0,0,0.25); color:rgba(255,255,255,0.95); font-size:14px; letter-spacing:0.25em; text-transform:uppercase; text-decoration:none; font-family:Arial,sans-serif; display:flex; align-items:center; gap:10px; transition:all 0.4s ease; cursor:pointer; appearance:none; -webkit-appearance:none;"
+            onmouseover="this.style.transform='scale(1.03)'; this.style.background='rgba(255,255,255,0.09)';"
+            onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(245,245,245,0.034)';">
+                RUPITRIK &nbsp; LIVE
+                <span style="width:7px; height:7px; background:#ffffff; border-radius:50%; display:inline-block;"></span>
+            </a>
+
+            <h2 class="endpage-title">
+                Ready to Trade
+                <span>Alongside Us?</span>
+            </h2>
+
+            <p class="endpage-subtitle">
+                Live trades. Real results. Verified track record.<br>
+                Join our Circle and trade with us in real time.
+            </p>
+
+
+            <p class="endpage-disclaimer">
+                DISCLAIMER: Trading involves significant risk. Past performance does not guarantee future results. All trades shown are<br>
+                from live YouTube streams and are for educational purposes only. Always do your own research and trade responsibly.
+            </p>
+
+            <div class="endpage-footer">©2026 Rupitrik, Inc. All rights reserved.</div>
+        </div>
+    </div>
+
+    <!-- SCROLL PROGRESS -->
+    <div style="position:fixed; bottom:28px; left:50%; transform:translateX(-50%); z-index:99999; width:44px; height:44px;">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+            <circle cx="22" cy="22" r="19" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <circle id="progressCircle" cx="22" cy="22" r="19" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="119" stroke-dashoffset="119" transform="rotate(-90 22 22)" filter="url(#glow)" style="transition:stroke-dashoffset 0.1s ease;"/>
+            <rect x="16" y="14" width="12" height="16" rx="6" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+            <rect x="21" y="17" width="2" height="4" rx="1" fill="rgba(255,255,255,0.6)"/>
+        </svg>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = scrollTop / docHeight;
+            const offset = 119 - (progress * 119);
+            document.getElementById('progressCircle').style.strokeDashoffset = offset;
+        });
+    </script>
+
+    <script>
+        const equitySvg = document.getElementById("equityChartSvg");
+        const hoverArea = document.getElementById("equityHoverArea");
+        const hoverLine = document.getElementById("equityHoverLine");
+        const hoverDot = document.getElementById("equityHoverDot");
+        const tooltip = document.getElementById("equityTooltip");
+        const tooltipTitle = document.getElementById("equityTooltipTitle");
+        const tooltipValue = document.getElementById("equityTooltipValue");
+        const tooltipResult = document.getElementById("equityTooltipResult");
+        const equityCurvePath = document.getElementById("equityCurvePath");
+
+        let currentTooltipX = 0;
+        let currentTooltipY = 0;
+        let targetTooltipX = 0;
+        let targetTooltipY = 0;
+        let tooltipAnimationFrame = null;
+        let tooltipHasPosition = false;
+
+        function animateTooltipPosition() {
+            currentTooltipX += (targetTooltipX - currentTooltipX) * 0.16;
+            currentTooltipY += (targetTooltipY - currentTooltipY) * 0.16;
+
+            tooltip.setAttribute(
+                "transform",
+                "translate(" + currentTooltipX + "," + currentTooltipY + ")"
+            );
+
+            tooltipAnimationFrame = requestAnimationFrame(animateTooltipPosition);
+        }
+
+        function getPointOnCurveByX(path, targetX) {
+            const length = path.getTotalLength();
+            let start = 0;
+            let end = length;
+
+            for (let i = 0; i < 30; i++) {
+                const mid = (start + end) / 2;
+                const point = path.getPointAtLength(mid);
+
+                if (point.x < targetX) {
+                    start = mid;
+                } else {
+                    end = mid;
+                }
+            }
+
+            return path.getPointAtLength((start + end) / 2);
+        }
+
+        function mapValue(value, inMin, inMax, outMin, outMax) {
+            return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+        }
+
+        function keepTooltipInsideChart(point) {
+            let tooltipX = point.x + 22;
+            let tooltipY = point.y + 24;
+
+            if (tooltipX > 930) tooltipX = point.x - 235;
+            if (tooltipX < 80) tooltipX = 80;
+            if (tooltipY > 285) tooltipY = point.y - 126;
+            if (tooltipY < 58) tooltipY = point.y + 30;
+
+            return { x: tooltipX, y: tooltipY };
+        }
+
+        function updateRoundDotRadius() {
+            if (!equitySvg || !hoverDot) return;
+
+            const rect = equitySvg.getBoundingClientRect();
+            const scaleX = rect.width / 1200;
+            const scaleY = rect.height / 420;
+            const screenRadius = 6;
+            const rx = screenRadius * (scaleY / scaleX);
+
+            hoverDot.setAttribute("rx", rx);
+            hoverDot.setAttribute("ry", screenRadius);
+        }
+
+        if (equitySvg && hoverArea && equityCurvePath) {
+            updateRoundDotRadius();
+            window.addEventListener("resize", updateRoundDotRadius);
+
+            hoverArea.addEventListener("mousemove", function(e) {
+                const rect = equitySvg.getBoundingClientRect();
+                const viewX = ((e.clientX - rect.left) / rect.width) * 1200;
+                const safeX = Math.max(70, Math.min(1165, viewX));
+                const point = getPointOnCurveByX(equityCurvePath, safeX);
+
+                updateRoundDotRadius();
+
+                const tradeNo = Math.max(1, Math.min(35, Math.round(mapValue(point.x, 70, 1165, 1, 35))));
+                const cumulativeR = Math.max(0, Math.round(mapValue(385 - point.y, 0, 385 - 20, 0, 76)));
+
+                const oneTradeStep = (1165 - 70) / 34;
+                const previousX = Math.max(70, point.x - oneTradeStep);
+                const previousPoint = getPointOnCurveByX(equityCurvePath, previousX);
+                const previousR = Math.max(0, Math.round(mapValue(385 - previousPoint.y, 0, 385 - 20, 0, 76)));
+                let resultR = tradeNo === 1 ? 0 : cumulativeR - previousR;
+                const formattedResultR = resultR > 0 ? "+" + resultR + "R" : resultR + "R";
+
+                hoverLine.setAttribute("x1", point.x);
+                hoverLine.setAttribute("x2", point.x);
+                hoverLine.style.opacity = "1";
+
+                hoverDot.setAttribute("cx", point.x);
+                hoverDot.setAttribute("cy", point.y);
+                hoverDot.style.opacity = "1";
+
+                tooltipTitle.textContent = "TRADE #" + tradeNo;
+                tooltipValue.textContent = cumulativeR + "R";
+                tooltipResult.textContent = formattedResultR;
+                tooltipResult.style.fill = formattedResultR.startsWith("-") ? "#ffffff" : "#2c2cff";
+
+                const tooltipPosition = keepTooltipInsideChart(point);
+                targetTooltipX = tooltipPosition.x;
+                targetTooltipY = tooltipPosition.y;
+
+                if (!tooltipHasPosition) {
+                    currentTooltipX = targetTooltipX;
+                    currentTooltipY = targetTooltipY;
+                    tooltip.setAttribute("transform", "translate(" + currentTooltipX + "," + currentTooltipY + ")");
+                    tooltipHasPosition = true;
+                }
+
+                if (!tooltipAnimationFrame) {
+                    tooltipAnimationFrame = requestAnimationFrame(animateTooltipPosition);
+                }
+
+                tooltip.style.opacity = "1";
+            });
+
+            hoverArea.addEventListener("mouseleave", function() {
+                hoverLine.style.opacity = "0";
+                hoverDot.style.opacity = "0";
+                tooltip.style.opacity = "0";
+                tooltipHasPosition = false;
+
+                if (tooltipAnimationFrame) {
+                    cancelAnimationFrame(tooltipAnimationFrame);
+                    tooltipAnimationFrame = null;
+                }
+            });
+        }
+    </script>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavButton = document.querySelector('.mobile-nav-toggle');
+            const mainNav = document.querySelector('nav');
+
+            if (mobileNavButton && mainNav) {
+                mobileNavButton.addEventListener('click', function() {
+                    const isOpen = mainNav.classList.toggle('mobile-open');
+                    mobileNavButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                });
+
+                mainNav.querySelectorAll('a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        mainNav.classList.remove('mobile-open');
+                        mobileNavButton.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
